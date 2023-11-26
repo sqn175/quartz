@@ -1,12 +1,13 @@
 ---
-title: ORB-SLAM2局部映射
-key: 20170524
-tags: SLAM ORB-SLAM
+title: ORB-SLAM2局部映射模块
+tags:
+  - SLAM
+  - ORB-SLAM2
+date: 2017-05-24
 ---
 ORB-SLAM2局部映射线程处理从跟踪线程传来的新的关键帧，进行local BA来优化相机位姿和局部地图点。同时搜索和当前关键帧共视的其他关键帧，寻找新的ORB特征匹配对，通过三角测量得到更多的地图点。根据跟踪线程提供的地图点信息，局部映射线程会严格剔除不合格的地图点，只保留高质量地图点。同时冗余的关键帧也会被剔除。局部映射线程流程如下图红线框内所示：
+![[ORB-SLAM2局部映射.png]]
 
-![orb-slam2_local_mapping](/images/orb-slam2/orb-slam2_local_mapping.png)
-<!--more-->
 主要包括：
 
 1. 插入关键帧；
@@ -70,7 +71,7 @@ mpLocalMapper->SetNotStop(false);
 
    如下图所示，分别是共视图和生成树（绿色部分）。
 
-   ![orb-slam2_covisibility_graph&spanning_tree](/images/orb-slam2/orb-slam2_covisibility_graph&spanning_tree.png)
+   ![[ORB-SLAM2共视图.png]]
 
    更新`mpCurrentKeyFrame`与其他关键帧的连接关系，也就是更新共视图和生成树：
 

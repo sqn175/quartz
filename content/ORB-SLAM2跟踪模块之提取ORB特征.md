@@ -1,12 +1,12 @@
 ---
-title: ORB-SLAM2跟踪之提取ORB特征
-key: 20170507
-tags: SLAM ORB-SLAM
+title: ORB-SLAM2跟踪模块【1/4】：提取ORB特征
+date: 2017-05-07
+tags:
+  - SLAM
+  - ORB-SLAM2
 ---
 ORB-SLAM2跟踪线程对相机输入的每一帧图像进行跟踪处理，如下图所示，主要包括4步，提取ORB特征、从上一帧或者重定位来估计初始位姿、局部地图跟踪和关键帧处理。
-
-![orb-slam2_tracking](/images/orb-slam2/orb-slam2_tracking.png)
-<!--more-->
+![[ORB-SLAM2流程.png]]
 以下结合相关理论知识，阅读ORB-SLAM2源代码，从而理解ORB-SLAM2算法中ORB特征提取过程。
 
 ## ORB（Oriented FAST and Rotated BRIEF）
@@ -118,7 +118,7 @@ cv::Mat GrabImageMonocular(const cv::Mat &im, const double &timestamp);
 
 ORB-SLAM2是一个基于特征的方法，它对输入的图像提取出角点的特征，如下图所示：
 
-![orb-slam2_pre-processing](/images/orb-slam2/orb-slam2_pre-processing.png)
+![[ORB-SLAM2提取特征点.png]]
 
 在提取出特征后，所有输入的图片都会删除，系统剩下的处理流程都是基于这些特征进行的，和相机类型无关。
 
@@ -187,7 +187,7 @@ void operator()( cv::InputArray image, cv::InputArray mask,
 
 ORB-SLAM提取ORB特征时采用了8层金字塔，尺寸因子为1.2。对于像素为512\*384到752\*480的图片，提取1000个FAST角点，对于更高的分辨率，提取2000个FAST角点就可以了。
 
-至此，得到当前帧ORB特征点`mvKeys`和描述子`mDescriptors`，均是`Frame`类对象` mCurrentFrame`的成员变量。提取出特征点后，需要对其去失真`UndistortKeyPoints();`。同时需要将图片分割为64*48大小的栅格，并将关键点按照位置分配到相应栅格中，从而降低匹配时的复杂度，实现函数为`AssignFeaturesToGrid();`	。
+至此，得到当前帧ORB特征点`mvKeys`和描述子`mDescriptors`，均是`Frame`类对象` mCurrentFrame`的成员变量。提取出特征点后，需要对其去失真`UndistortKeyPoints();`。同时需要将图片分割为64 * 48大小的栅格，并将关键点按照位置分配到相应栅格中，从而降低匹配时的复杂度，实现函数为`AssignFeaturesToGrid();`	。
 
 ## 参考
 

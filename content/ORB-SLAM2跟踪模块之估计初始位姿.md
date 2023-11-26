@@ -1,7 +1,9 @@
 ---
-title: ORB-SLAM2跟踪之估计初始位姿
-key: 20170514
-tags: SLAM ORB-SLAM
+title: ORB-SLAM2跟踪模块【2/4】：估计初始位姿
+date: 2017-05-14
+tags:
+  - SLAM
+  - ORB-SLAM2
 ---
 上一次主要说明了ORB-SLAM2跟踪中提取ORB特征的过程，跟踪的主要接口是`Tracking`类中的`cv::Mat GrabImageMonocular(const cv::Mat &im, const double &timestamp);`函数，其对输入图像进行预处理，提取ORB特征，并且调用`Track();`函数。`Track()`是`Tracking`类的protected函数。
 

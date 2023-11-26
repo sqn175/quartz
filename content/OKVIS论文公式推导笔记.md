@@ -1,11 +1,12 @@
 ---
-title: OKVIS公式推导
-key: 20171017
-tags: SLAM VIO
+title: OKVIS论文公式推导笔记
+date: 2017-10-17
+tags:
+  - SLAM
+  - VIO
 ---
 
 OKVIS是早期（2015年）开源的基于关键帧的视觉-惯导SLAM方案，是众多SLAM研究者入门必须了解的VIO方案之一，放在今天OKVIS的数据集测试结果仍然非常优秀。这篇博文主要针对OKVIS论文[1]整理其中的理论推导。
-<!--more-->
 
 ## 定义
 定义需要估计的机器人状态$\mathbf x_R$：
@@ -14,10 +15,10 @@ $$
 \mathbf x_R:=[{}_W\mathbf r_S^T,\mathbf q_{WS}^T,{}_S\mathbf v^T,\mathbf b_g^T,\mathbf b_a^T]^T
 $$
 
-其中$\_W \mathbf r_S^T \in \mathbb R^3$
-是机器人在世界坐标系下的三维位置；单位四元数$\mathbf q_{WS}^T \in S^3$是机器人在世界坐标系下的朝向，对应的旋转矩阵为$\mathbf C_{WS} \in \mathbb R^{4 \times4}$。进一步将上述状态分为两个部分，位姿部分$\mathbf x_T:=[\_W \mathbf r_S^T,\mathbf q_{WS}^T]$和速度/零偏部分$\mathbf x_{sb}:=[\_S \mathbf v^T,\mathbf b_g^T,\mathbf b_a^T]$。
+其中${}_W \mathbf r_S^T \in \mathbb R^3$
+是机器人在世界坐标系下的三维位置；单位四元数$\mathbf q_{WS}^T \in S^3$是机器人在世界坐标系下的朝向，对应的旋转矩阵为$\mathbf C_{WS} \in \mathbb R^{4 \times4}$。进一步将上述状态分为两个部分，位姿部分$\mathbf x_T:=[{}_W \mathbf r_S^T,\mathbf q_{WS}^T]$和速度/零偏部分$\mathbf x_{sb}:=[{}_S \mathbf v^T,\mathbf b_g^T,\mathbf b_a^T]$。
 
-考虑相机外参的话，将其定义为$\mathbf x_{C_i}:=[\_S\mathbf r_{C_i}^T,\mathbf q_{SC_i}^T]^T$，其可以是通过事先校正得到的固定值，也可以当做一个一阶高斯变量来估计，因为外参只受到温度影响。
+考虑相机外参的话，将其定义为$\mathbf x_{C_i}:=[{}_S\mathbf r_{C_i}^T,\mathbf q_{SC_i}^T]^T$，其可以是通过事先校正得到的固定值，也可以当做一个一阶高斯变量来估计，因为外参只受到温度影响。
 
 ## 非线性优化
 考虑代价函数$\mathbf F(\mathbf x)$，$\mathbf x$是待估计的状态，$\mathbf x$的最优值可通过最小化代价函数求得：
@@ -63,7 +64,7 @@ $$
 \mathbf e^{j,k}_{\mathbf r}=\mathbf z^{j,k}-\mathbf h(\mathbf T^k_{CS}\mathbf T^k_{SW} {}_W\mathbf l^j)
 $$
 
-其中，$\_W\mathbf l^j \in \mathbb R^4$ 是第$j$个路标点在世界坐标系下的齐次坐标表示，第四维值为1。下标$k$表示时刻$k$。$\mathbf z^{j,k} \in \mathbb R^3$表示路标点$j$在时刻$k$图像上的观测值，也是齐次坐标。$\mathbf T^k_{SW}$为变换矩阵，将世界坐标系中的点变换到第$k$次测量时的sensor坐标系中。$\mathbf T^k_{CS}$将第$k$次测量时sensor坐标系中的点变换到相机坐标系中。$\mathbf h()$为相机投影模型。以下在公式中省略时刻$k$。
+其中，${}_W\mathbf l^j \in \mathbb R^4$ 是第$j$个路标点在世界坐标系下的齐次坐标表示，第四维值为1。下标$k$表示时刻$k$。$\mathbf z^{j,k} \in \mathbb R^3$表示路标点$j$在时刻$k$图像上的观测值，也是齐次坐标。$\mathbf T^k_{SW}$为变换矩阵，将世界坐标系中的点变换到第$k$次测量时的sensor坐标系中。$\mathbf T^k_{CS}$将第$k$次测量时sensor坐标系中的点变换到相机坐标系中。$\mathbf h()$为相机投影模型。以下在公式中省略时刻$k$。
 
 为了进行非线性优化过程以及之后的边缘化步骤，需要求出重投影误差对最小机器人状态误差向量的雅克比矩阵。
 
@@ -298,7 +299,7 @@ $$
 
 ### 雅克比矩阵
 
-在这里需要注意的是，机器人位姿状态量为$\mathbf x_T:=[\_W\mathbf r_S^T,\mathbf q_{WS}^T]$ ，对应的变换矩阵为
+在这里需要注意的是，机器人位姿状态量为$\mathbf x_T:=[{}_W\mathbf r_S^T,\mathbf q_{WS}^T]$ ，对应的变换矩阵为
 
 $$
 \mathbf T_{WS}=
@@ -314,7 +315,7 @@ $$
 \mathbf e^{j,k}_{\mathbf r}=\mathbf z^{j,k}-\mathbf h(\mathbf T^{k\;\;-1}_{SC}\mathbf T^{k\;\;-1}_{WS} {}_W\mathbf l^j)
 $$
 
-对其线性化,，设$\delta \mathbf t_T \in \mathbb R^{6\times1}$是$\mathbf T\_{WS}$在 值$\mathbf {\bar T}\_{WS}$的扰动，$\delta \mathbf t_C \in \mathbb R^{6\times1}$是$\mathbf {T}_{SC}$在值$\mathbf {\bar T}\_{SC}$的扰动，$\delta \mathbf l\in\mathbb R^{4\times1}$是$\_W\mathbf {l}^j$在值$\_W\mathbf {\bar l}^j$的扰动值。对重投影误差进行扰动得到：
+对其线性化,，设$\delta \mathbf t_T \in \mathbb R^{6\times1}$是$\mathbf T_{WS}$在值$\mathbf {\bar T}_{WS}$的扰动，$\delta \mathbf t_C \in \mathbb R^{6\times1}$是$\mathbf {T}_{SC}$在值$\mathbf {\bar T}_{SC}$的扰动，$\delta \mathbf l\in\mathbb R^{4\times1}$是${}_W\mathbf {l}^j$在值${}_W\mathbf {\bar l}^j$的扰动值。对重投影误差进行扰动得到：
 
 $$
 \mathbf e^{j,k}_{\mathbf r}

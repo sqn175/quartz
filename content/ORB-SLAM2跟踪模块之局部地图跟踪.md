@@ -1,10 +1,12 @@
 ---
-title: ORB-SLAM2跟踪之局部地图跟踪
-key: 20170520
-tags: SLAM ORB-SLAM
+title: ORB-SLAM2跟踪模块【4/4】：局部地图跟踪
+date: 2017-09-13
+tags:
+  - SLAM
+  - ORB-SLAM2
 ---
 ORB-SLAM2估计得到相机的初始位姿后，通过与局部地图进行匹配，进一步优化当前图像帧的位姿态。
-<!--more-->
+
 ## 回顾：帧间匹配得到初始位姿
 
 上一次主要说明了ORB-SLAM2跟踪过程中每帧初始位姿的估计。回顾一下，初始位姿的估计主要是在帧与帧之间进行，有三种方法来估计，TrackWithMotionModel，TrackReferenceKeyFrame，Relocalization。
@@ -49,7 +51,6 @@ Relocalization是在跟踪丢失时，将当前帧与候选关键帧通过BoW进
 2. 将局部地图点`mvpLocalMapPoints`投影到当前帧，投影矩阵是通过帧间匹配得到。判断局部地图点是否在当前帧的视野内（视野内，mbTrackInView 为true），只有视野内的地图点才进行投影匹配。判断要求包括：投影点是否在图像内；地图点到相机中心距离是否在尺寸变换范围内；相机中心到地图点向量与地图点平均视角夹角是否小于60°。
 
 3. 对视野内的地图点通过投影进行特征匹配：
-
    `matcher.SearchByProjection(mCurrentFrame,mvpLocalMapPoints,th);`，得到一组3D局部地图点-2D特征点匹配对。
 
 ### Motion-Only BA
