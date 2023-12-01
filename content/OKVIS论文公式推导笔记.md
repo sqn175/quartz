@@ -15,8 +15,7 @@ $$
 \mathbf x_R:=[{}_W\mathbf r_S^T,\mathbf q_{WS}^T,{}_S\mathbf v^T,\mathbf b_g^T,\mathbf b_a^T]^T
 $$
 
-其中${}_W \mathbf r_S^T \in \mathbb R^3$
-是机器人在世界坐标系下的三维位置；单位四元数$\mathbf q_{WS}^T \in S^3$是机器人在世界坐标系下的朝向，对应的旋转矩阵为$\mathbf C_{WS} \in \mathbb R^{4 \times4}$。进一步将上述状态分为两个部分，位姿部分$\mathbf x_T:=[{}_W \mathbf r_S^T,\mathbf q_{WS}^T]$和速度/零偏部分$\mathbf x_{sb}:=[{}_S \mathbf v^T,\mathbf b_g^T,\mathbf b_a^T]$。
+其中${}_W \mathbf r_S^T \in \mathbb R^3$是机器人在世界坐标系下的三维位置；单位四元数$\mathbf q_{WS}^T \in S^3$是机器人在世界坐标系下的朝向，对应的旋转矩阵为$\mathbf C_{WS} \in \mathbb R^{4 \times4}$。进一步将上述状态分为两个部分，位姿部分$\mathbf x_T:=[{}_W \mathbf r_S^T,\mathbf q_{WS}^T]$和速度/零偏部分$\mathbf x_{sb}:=[{}_S \mathbf v^T,\mathbf b_g^T,\mathbf b_a^T]$。
 
 考虑相机外参的话，将其定义为$\mathbf x_{C_i}:=[{}_S\mathbf r_{C_i}^T,\mathbf q_{SC_i}^T]^T$，其可以是通过事先校正得到的固定值，也可以当做一个一阶高斯变量来估计，因为外参只受到温度影响。
 
@@ -40,7 +39,7 @@ $$
 \mathbf F(\mathbf x):=\underbrace{\sum_{i=1}^I \sum_{k=1}^K \sum_{j \in\mathcal J(i,k)} \mathbf e_r^{i,j,k \;T}\mathbf W_r^{i,j,k}  \mathbf e_r^{i,j,k}}_{视觉}+ \underbrace{\sum_{k=1}^{K-1} \mathbf e_s^{k \;T} \mathbf W_s^k \mathbf e_s^k}_{惯导}
 $$
 
-其中$\mathbf e_r^{i,j,k}$为重投影误差，$\mathbf e_s^k$为IMU误差项。$i$为系统中的相机下标，$k$为相机采集图像的下标，$j$为路标点的下标，$\mathcal J(i,k)$为相机$i$观测在第$k$帧图像观测到的路标点,$\mathbf W$为信息矩阵。谷歌提供了***ceres库***可以用来求解非线性优化问题。
+其中$\mathbf e_r^{i,j,k}$为重投影误差，$\mathbf e_s^k$为IMU误差项。$i$为系统中的相机下标，$k$为相机采集图像的下标，$j$为路标点的下标，$\mathcal J(i,k)$为相机$i$在第$k$帧图像观测到的路标点,$\mathbf W$为信息矩阵。谷歌提供了***ceres库***可以用来求解非线性优化问题。
 
 ## 在流形上进行优化
 
@@ -113,7 +112,7 @@ $$
 $$
 \mathbf {\bar x}:=
 \begin {bmatrix}
-\mathbf {\rho} \\
+\bar \rho \\
 \bar \phi
 \end {bmatrix}_{6\times1}
 $$
