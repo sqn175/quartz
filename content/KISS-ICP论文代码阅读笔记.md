@@ -58,7 +58,7 @@ $$
 2. 继续降采样得到$\hat{\mathcal{P}}^*$。为了保证ICP的计算效率，需要进一步降采样。通过设定体素尺寸为$\beta v$，且$\beta \in[1.0,2.0]$，每个体素保留一个点。$\hat{\mathcal{P}}^*$采样自$\mathcal{P}_{\text {merge }}^*$，所以$\hat{\mathcal{P}}^* \subseteq \mathcal{P}^*$。
 
 实现代码如下：
-```c++
+```c
 KissICP::Vector3dVectorTuple KissICP::Voxelize(const std::vector<Eigen::Vector3d> &frame) const {
     // 体素尺寸
     const auto voxel_size = config_.voxel_size;
@@ -72,7 +72,7 @@ KissICP::Vector3dVectorTuple KissICP::Voxelize(const std::vector<Eigen::Vector3d
 
 其中`VoxelDownsample`实现代码如下：
 
-```c++
+```c
 std::vector<Eigen::Vector3d> VoxelDownsample(const std::vector<Eigen::Vector3d> &frame, double voxel_size) {
     tsl::robin_map<Voxel, Eigen::Vector3d, VoxelHash> grid;
     grid.reserve(frame.size());
@@ -109,12 +109,12 @@ ICP算法第一步是找到Source点云与Target点云中的对应点，第二�
 
 局部地图的核心数据结构定义为：
 
-```c++
+```c
 tsl::robin_map<Voxel, VoxelBlock, VoxelHash> map_;
 ```
 `Voxel, VoxelBlock, VoxelHash`对应的定义分别为：
 
-```c++
+```c
 using Voxel = Eigen::Vector3i;
 
 struct VoxelBlock {
@@ -135,7 +135,7 @@ struct VoxelHash {
 
 其中`Voxel`是`map_`对应的索引值，等于坐标值除以体素尺寸：
 
-```c++
+```c
 auto voxel = Voxel((point / voxel_size_).template cast<int>());
 ```
 
@@ -151,7 +151,7 @@ $$
 
 对于Source点云中$p$，可以根据建立的体素哈希表，查找该点在Target点云中的空间相邻体素，然后从体素中搜索与$p$距离最近的点，作为最近邻。处理代码如下所示：
 
-```c++
+```c
 // Lambda Function to obtain the KNN of one point, maybe refactor
     auto GetClosestNeighboor = [&](const Eigen::Vector3d &point) {
         auto kx = static_cast<int>(point[0] / voxel_size_);
@@ -257,7 +257,7 @@ $$
 
 对应的代码如下所示：
 
-```c++
+```c
 Sophus::SE3d RegisterFrame(const std::vector<Eigen::Vector3d> &frame,
                            const VoxelHashMap &voxel_map,
                            const Sophus::SE3d &initial_guess,
