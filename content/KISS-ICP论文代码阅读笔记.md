@@ -236,11 +236,11 @@ $$
 \mathcal{S}=\left\{s_i=\boldsymbol {T}_{t-1} \boldsymbol {T}_{\text {pred }, t} \boldsymbol{~p} \mid \boldsymbol{p} \in \hat{\mathcal{P}}^*\right\} .
 $$
 2. ICP迭代配准。
-	 a. 估计局部地图$\mathcal{Q}=\left\{\boldsymbol{q}_i \mid \boldsymbol{q}_i \in \mathbb{R}^3\right\}$与待配准点云$\mathcal{S}$的点云对$\mathcal{C}\left(\tau_t\right)$，根据[估计对应点](#估计对应点)章节；
+	a. 估计局部地图$\mathcal{Q}=\left\{\boldsymbol{q}_i \mid \boldsymbol{q}_i \in \mathbb{R}^3\right\}$与待配准点云$\mathcal{S}$的点云对$\mathcal{C}\left(\tau_t\right)$，根据[估计对应点](#估计对应点)章节；
     b. 求解当前位姿更新量$\Delta \boldsymbol{T}_{\text {est }, j}$:	   
 	$$
        \Delta \boldsymbol{T}_{\mathrm{est}, j}=\underset{\boldsymbol{T}}{\operatorname{argmin}} \sum_{(s, q) \in \mathcal{C}\left(\tau_t\right)} \rho\left(\|\boldsymbol{T} s-\boldsymbol{q}\|_2\right)
-   $$
+    $$
 	c. 更新待配准点云$\mathcal{S}$：
 	$$
 	\left\{\boldsymbol{s}_i \leftarrow \Delta \boldsymbol{T}_{\text {est }, j} \boldsymbol{s}_i \mid \boldsymbol{s}_i \in \mathcal{S}\right\}
